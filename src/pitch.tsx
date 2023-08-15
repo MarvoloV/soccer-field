@@ -1,54 +1,17 @@
 import { select as d3Select } from "d3-selection";
 import { arc as d3Arc } from "d3-shape";
-import css from  './index.css?inline'
+import * as d3 from "d3";
 
-  export const pitch= ()=> {
-     const pitchLenght = 105;
- const pitchWidth = 68;
+export const pitch = () => {
+  const pitchLenght = 105;
+  const pitchWidth = 68;
   let clip = { top: 0, right: pitchLenght, bottom: pitchWidth, left: 0 };
   let height = 300;
   let rotated = false;
   let width = ((-clip.left + clip.right) / (-clip.top + clip.bottom)) * height;
   let pitchstrokewidth = 0.5;
   let dirOfPlay = false;
-  let shadeMiddleThird = false;
-  let drawGoalsFn = drawGoalsAsLine;
-
-  function drawGoalsAsBox(lines) {
-    lines
-      .append("rect")
-      .style("stroke-width", pitchstrokewidth)
-      .style("fill", "none")
-      .attr("x", -2)
-      .attr("y", pitchWidth / 2 - 3.66)
-      .attr("width", 2)
-      .attr("height", 7.32);
-    lines
-      .append("rect")
-      .style("stroke-width", pitchstrokewidth)
-      .style("fill", "none")
-      .attr("x", pitchLenght)
-      .attr("y", pitchWidth / 2 - 3.66)
-      .attr("width", 2)
-      .attr("height", 7.32);
-  }
-
-  function drawGoalsAsLine(lines) {
-    lines
-      .append("rect")
-      .style("stroke-width", 0)
-      .attr("x", -pitchstrokewidth * 1.5)
-      .attr("y", pitchWidth / 2 - 3.66)
-      .attr("width", pitchstrokewidth * 3)
-      .attr("height", 7.32);
-    lines
-      .append("rect")
-      .style("stroke-width", 0)
-      .attr("x", pitchLenght - pitchstrokewidth * 1.5)
-      .attr("y", pitchWidth / 2 - 3.66)
-      .attr("width", pitchstrokewidth * 3)
-      .attr("height", 7.32);
-  }
+  let shadeMiddleThird = true;
 
   function chart(g) {
     g.each(function () {
@@ -87,7 +50,7 @@ import css from  './index.css?inline'
       const lines = pitch
         .append("g")
         .attr("id", "lines")
-        .attr("class","pitch")
+        .attr("class", "pitch")
         .attr("pointer-events", "none");
 
       // Halfway line
@@ -189,25 +152,7 @@ import css from  './index.css?inline'
         .attr("cy", pitchWidth / 2)
         .attr("r", pitchstrokewidth);
 
-      // Direction of play
-      if (dirOfPlay) {
-        lines
-          .append("polygon")
-          .attr("class","shaded")
-          .attr(
-            "points",
-            `
-                  25,${pitchWidth / 2 - 2} 
-                  35,${pitchWidth / 2 - 2} 
-                  35,${pitchWidth / 2 - 5} 
-                  40,${pitchWidth / 2} 
-                  35,${pitchWidth / 2 + 5} 
-                  35,${pitchWidth / 2 + 2} 
-                  25,${pitchWidth / 2 + 2} 
-                  25,${pitchWidth / 2 - 2}
-                `
-          );
-      }
+      
 
       // Pitch boundaries
       lines
@@ -219,25 +164,269 @@ import css from  './index.css?inline'
         .attr("width", pitchLenght)
         .attr("height", pitchWidth);
 
-      // Goals
-      drawGoalsFn(lines);
-
       pitch.append("g").attr("id", "above");
 
       // Middle third
       if (shadeMiddleThird) {
-        lines
-          .append("rect")
-          .attr("class", "shaded")
-          .attr("fill", "#fff")
-          .attr("x", 35)
-          .attr("y", 0)
-          .attr("width", 35)
-          .attr("height", pitchWidth);
+        const linesInfo = [
+          -2.5, 10.5, 22.5, 35.5, 47.1, 60.4, 75.2, 89.2, 102.1,
+        ];
+        linesInfo.forEach((info) => {
+          lines
+            .append("rect")
+            .attr("class", "shaded")
+            .attr("fill", "#000000")
+            .attr("x", info)
+            .attr("y", 0)
+            .attr("width", 5.5)
+            .attr("height", pitchWidth);
+        });
       }
+      // prueba svg draw
+      const fieldWidth = 106;
+      const fieldHeight = 68;
+      const teamPositions = [
+        {
+          x: fieldWidth * 0.03,
+          y: fieldHeight * 0.5,
+          name: "Jorge",
+          team: "player",
+          positionNumber: 10,
+        }, // Goalkeeper
+        {
+          x: fieldWidth * 0.11,
+          y: fieldHeight * 0.72,
+          name: "Luis",
+          team: "player",
+          positionNumber: 20,
+        }, // Goalkeeper
+        {
+          x: fieldWidth * 0.11,
+          y: fieldHeight * 0.5,
+          name: "Luis",
+          team: "player",
+          positionNumber: 1,
+        }, // Goalkeeper
+        {
+          x: fieldWidth * 0.11,
+          y: fieldHeight * 0.28,
+          name: "Luis",
+          team: "player",
+          positionNumber: 2,
+        }, // Goalkeeper
+
+        {
+          x: fieldWidth * 0.21,
+          y: fieldHeight * 0.13,
+          name: "Remirez",
+          team: "player",
+          positionNumber: 4,
+        }, // Defender
+        {
+          x: fieldWidth * 0.21,
+          y: fieldHeight * 0.28,
+          name: "Miguel",
+          team: "player",
+          positionNumber: 10,
+        }, // Midfielder
+        {
+          x: fieldWidth * 0.21,
+          y: fieldHeight * 0.72,
+          name: "Angel",
+          team: "player",
+          positionNumber: 10,
+        },
+        {
+          x: fieldWidth * 0.21,
+          y: fieldHeight * 0.91,
+          name: "Angel",
+          team: "player",
+          positionNumber: 10,
+        }, // Forward
+        {
+          x: fieldWidth * 0.35,
+          y: fieldHeight * 0.5,
+          name: "Angel",
+          team: "player",
+          positionNumber: 10,
+        }, // Forward
+        {
+          x: fieldWidth * 0.44,
+          y: fieldHeight * 0.72,
+          name: "Angel",
+          team: "player",
+          positionNumber: 10,
+        }, // Forward
+        {
+          x: fieldWidth * 0.44,
+          y: fieldHeight * 0.28,
+          name: "Angel",
+          team: "player",
+          positionNumber: 10,
+        }, // Forward
+
+        // Add more team positions
+        // ...
+      ];
+
+      const opponentPositions = [
+        {
+          x: fieldWidth * 0.03,
+          y: fieldHeight * 0.5,
+          name: "Jorge",
+          team: "opponent",
+          positionNumber: 10,
+        }, // Goalkeeper
+        {
+          x: fieldWidth * 0.11,
+          y: fieldHeight * 0.72,
+          name: "Luis",
+          team: "opponent",
+          positionNumber: 50,
+        }, // Goalkeeper
+        {
+          x: fieldWidth * 0.11,
+          y: fieldHeight * 0.5,
+          name: "Luis",
+          team: "opponent",
+          positionNumber: 40,
+        }, // Goalkeeper
+        {
+          x: fieldWidth * 0.11,
+          y: fieldHeight * 0.28,
+          name: "Luis",
+          team: "opponent",
+          positionNumber: 41,
+        }, // Goalkeeper
+
+        {
+          x: fieldWidth * 0.21,
+          y: fieldHeight * 0.13,
+          name: "Remirez",
+          team: "opponent",
+          positionNumber: 42,
+        }, // Defender
+        {
+          x: fieldWidth * 0.21,
+          y: fieldHeight * 0.28,
+          name: "Miguel",
+          team: "opponent",
+          positionNumber: 43,
+        }, // Midfielder
+        {
+          x: fieldWidth * 0.21,
+          y: fieldHeight * 0.72,
+          name: "Angel",
+          team: "opponent",
+          positionNumber: 44,
+        },
+        {
+          x: fieldWidth * 0.21,
+          y: fieldHeight * 0.91,
+          name: "Angel",
+          team: "opponent",
+          positionNumber: 45,
+        }, // Forward
+        {
+          x: fieldWidth * 0.35,
+          y: fieldHeight * 0.5,
+          name: "Angel",
+          team: "opponent",
+          positionNumber: 10,
+        }, // Forward
+        {
+          x: fieldWidth * 0.44,
+          y: fieldHeight * 0.72,
+          name: "Angel",
+          team: "opponent",
+          positionNumber: 70,
+        }, // Forward
+        {
+          x: fieldWidth * 0.44,
+          y: fieldHeight * 0.28,
+          name: "Angel",
+          team: "opponent",
+          positionNumber: 82,
+        }, // F
+
+        // Add more opponent positions
+        // ...
+      ];
+      const playerGroups = pitch
+        .selectAll(".player-group")
+        .data(teamPositions)
+        .enter()
+        .append("g")
+        .attr("class", "player-group")
+        .on("mouseover", showTooltip)
+        .on("mouseout", hideTooltip);
+      playerGroups
+        .append("circle")
+        .attr("cx", (d) => d.x)
+        .attr("cy", (d) => fieldHeight - d.y)
+        .attr("r", 3)
+        .attr("class", (d) => (d.team === "player" ? "player" : "opponent"));
+      playerGroups
+        .append("text")
+        .attr("x", (d) => d.x)
+        .attr("y", (d) => fieldHeight - d.y)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("class", "player-number")
+        .text((d) => d.positionNumber);
+      const playerGroupsOponent = pitch
+        .selectAll(".opponent-group")
+        .data(opponentPositions)
+        .enter()
+        .append("g")
+        .attr("class", "player-group")
+        .on("mouseover", showTooltip)
+        .on("mouseout", hideTooltip);
+      playerGroupsOponent
+        .append("circle")
+        .attr("cx", (d) => fieldWidth - d.x)
+        .attr("cy", (d) => d.y)
+        .attr("r", 3)
+        .attr("class", (d) => (d.team === "player" ? "player" : "opponent"));
+      playerGroupsOponent
+        .append("text")
+        .attr("x", (d) => fieldWidth - d.x)
+        .attr("y", (d) => d.y)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("class", "player-number")
+        .text((d) => d.positionNumber);
     });
   }
+  function showTooltip(event, d) {
+    const playerGroup = d3.select(this); // Obtén el grupo actual que se está haciendo hover
+    playerGroup
+      .selectAll(".player,.opponent") // Aplica el hover al círculo y al número
+      .classed("player-hover", true);
+    
+     d3
+      .select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("background-color", "white")
+      .style("color", "black")
+      .style("padding", "3px")
+      .style("border-radius", "3px")
+      .style("border","1px solid black")
+      .style("pointer-events", "none")
+      .style("left", event.pageX + "px")
+      .style("top", event.pageY +16 + "px")
+      .text( `[${d.positionNumber}] ${d.name}`);
+  }
 
+  function hideTooltip() {
+    const playerGroup = d3.select(this); // Obtén el grupo actual que se hizo hover
+    playerGroup
+      .selectAll(".player,.opponent") // Elimina el hover del círculo y el número
+      .classed("player-hover", false);
+    d3.select(".tooltip").remove();
+  }
   chart.height = function (_) {
     if (!arguments.length) return height;
     height = +_;
@@ -255,32 +444,6 @@ import css from  './index.css?inline'
     return chart;
   };
 
-  chart.showDirOfPlay = function (_) {
-    if (!arguments.length) return dirOfPlay;
-    dirOfPlay = Boolean(_);
-    return chart;
-  };
-
-  chart.shadeMiddleThird = function (_) {
-    if (!arguments.length) return shadeMiddleThird;
-    shadeMiddleThird = Boolean(_);
-    return chart;
-  };
-
-  chart.pitchStrokeWidth = function (_) {
-    if (!arguments.length) return pitchstrokewidth;
-    pitchstrokewidth = +_;
-    return chart;
-  };
-
-  chart.goals = function (_) {
-    if (!arguments.length) return drawGoalsFn;
-    if (_ === "box") drawGoalsFn = drawGoalsAsBox;
-    else if (_ === "line") drawGoalsFn = drawGoalsAsLine;
-    else drawGoalsFn = _;
-    return chart;
-  };
-
   chart.clip = function (_) {
     if (!arguments.length)
       return [
@@ -293,4 +456,4 @@ import css from  './index.css?inline'
   };
 
   return chart;
-}
+};
