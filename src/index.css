@@ -69,13 +69,7 @@
   fill: white;
 }
 
-.player {
-  fill: yellow;
-}
 
-.opponent {
-  fill: red;
-}
 
 .field-line {
   stroke: white;
@@ -89,7 +83,7 @@
 }
 .player-number {
   fill: white;
-  font-size: 3px; /* Aumentar el tamaño del número */
+  font-size: 2px; /* Aumentar el tamaño del número */
   text-anchor: middle;
   dominant-baseline: central;
 }
