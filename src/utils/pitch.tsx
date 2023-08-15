@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { select as d3Select } from "d3-selection";
 import { arc as d3Arc } from "d3-shape";
 import * as d3 from "d3";
-import { PlayerInformation } from "./interfaces/PlayerInformation";
+import { PlayerInformation } from "../interfaces/PlayerInformation";
 import { MouseEvent } from "react";
 
 export const pitch = (
@@ -19,8 +20,10 @@ export const pitch = (
   let colorTeam1='';
   let colorTeam2='';
 
+  // @ts-ignore
   function chart(g) {
     g.each(function () {
+      // @ts-ignore
       const pitch = d3Select(this)
         .append("svg")
         .attr("width", width)
@@ -92,6 +95,7 @@ export const pitch = (
       lines
         .append("path")
         .style("stroke-width", pitchstrokewidth)
+        // @ts-ignore
         .attr("d", arc1)
         .attr("transform", "translate(11," + fieldHeight / 2 + ")");
       const arc2 = d3Arc()
@@ -102,6 +106,7 @@ export const pitch = (
       lines
         .append("path")
         .style("stroke-width", pitchstrokewidth)
+        // @ts-ignore
         .attr("d", arc2)
         .attr(
           "transform",
@@ -187,16 +192,6 @@ export const pitch = (
         });
       }
 
-      // const TeamPlayer = teamPositions.map((player) => ({
-      //   ...player,
-      //   x:  player.coords.x,
-      //   y:  player.coords.y,
-      // }));
-      // const TeamOposition = opponentPositions.map((player.coords) => ({
-      //   ...player,
-      //   x:  player.coords.x,
-      //   y:  player.coords.y,
-      // }));
       const playerGroups = pitch
         .selectAll(".player-group")
         .data(teamPositions)
@@ -247,6 +242,7 @@ export const pitch = (
     });
   }
   function showTooltip(event:MouseEvent, d:PlayerInformation) {
+    // @ts-ignore
     const playerGroup = d3.select(this); // Obtén el grupo actual que se está haciendo hover
     playerGroup
       .selectAll(".player,.opponent") // Aplica el hover al círculo y al número
@@ -268,6 +264,7 @@ export const pitch = (
   }
 
   function hideTooltip() {
+    // @ts-ignore
     const playerGroup = d3.select(this); // Obtén el grupo actual que se hizo hover
     playerGroup
       .selectAll(".player,.opponent") // Elimina el hover del círculo y el número
@@ -285,7 +282,7 @@ export const pitch = (
     colorTeam2=colorTeamOponnent;
     return chart;
   }
-  chart.clip = function (_) {
+  chart.clip = function (_:number[][]) {
     if (!arguments.length)
       return [
         [clip.left, clip.top],
